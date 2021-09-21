@@ -1,0 +1,22 @@
+<% if user_signed_in? %>
+<%= link_to "マイページへ", user_path(current_user.id) %>
+
+<h1>検索ページ</h1>
+<h3>スポット一覧</h3>
+<div class="drivings-container">
+  <% @drivings.each do |d| %>
+  <div class="driving">
+    <p><%= image_tag d.image_url, size: "150x100" if d.image? %>
+    <%= d.destination %></p>
+    <p><%= d.body %></p>
+    <p>所在地：<%= d.address %></p>
+    <i class="far fa-heart"></i><%= d.likes.count %>
+    <%= link_to "詳細へ", driving_path(d.id) %>
+  </div>
+  <% end %>
+  <% @rank_drivings.each do |d| %>
+  <% end %>
+</div>
+
+<% end %>
+

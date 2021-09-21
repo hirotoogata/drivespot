@@ -1,0 +1,27 @@
+<h1>マイページ</h1>
+<p>名前 : <%= @user.name %></p>
+<p>メールアドレス : <%= @user.email %></p>
+
+<% if current_user.id == @user.id %>
+  <%= link_to "編集する", edit_user_registration_path %>
+<% end %>
+
+<%= link_to '探す', drivings_path %>
+<%= link_to '新規投稿・投稿一覧', new_driving_path %>
+
+<%= button_to 'ログアウト', destroy_user_session_path, method: :delete %>
+
+<div class="likespots-container">
+    <h3>お気に入りスポット</h3>
+    <% @likespots.each do |d| %>
+        <div class="driving">
+          <p><%= image_tag d.image_url, size: "150x100" if d.image? %>
+          <%= d.destination %></p>
+          <p>所在地：<%= d.address %></p>
+          <%= link_to "詳細へ", driving_path(d.id) %>
+        </div>
+    <% end %>
+  </div>
+
+
+

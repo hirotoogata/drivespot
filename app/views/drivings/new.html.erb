@@ -1,0 +1,49 @@
+<% if user_signed_in? %>
+<%= link_to "マイページへ", user_path(current_user.id) %>
+<% end %>
+
+<h1>スポット投稿</h1>
+
+<h3>新規投稿</h3>
+<%= form_for @driving do |f| %>
+
+  <div class="field">
+    <%= f.label :spot %>
+    <%= f.text_field :destination, :size => 50 %>
+  </div>
+
+  <div class='form-group'>
+        <%= f.select(:genre_ids, Genre.all, :id, :name) do |genre| %>
+            
+        <% end %>
+  </div>
+
+  <div class="field">
+    <%= f.label :image %>
+    <%= f.file_field :image %>
+  </div>
+  <div class="field">
+    <%= f.label :body %>
+    <%= f.text_area :body, :size =>"70x10" %>
+  </div>
+  <div class="field">
+    <%= f.label :address %>
+    <%= f.text_field :address, :size => 100 %>
+  </div>
+
+  <%= f.submit "投稿する" %>
+<% end %>
+
+  <div class="drivings-container">
+    <h1>自分の投稿</h1>
+    <% @drivings.each do |d| %>
+        <div class="driving">
+          <p><%= image_tag d.image_url, size: "150x100" if d.image? %>
+          <%= d.destination %></p>
+          <p><%= d.body %></p>
+          <p>所在地：<%= d.address %></p>
+        </div>
+        <%= link_to "編集する", edit_driving_path(d.id) %>
+        <%= button_to "削除する", driving_path(d.id), method: :delete %>
+      <% end %>
+  </div>

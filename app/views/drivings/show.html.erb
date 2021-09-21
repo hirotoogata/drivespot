@@ -1,0 +1,48 @@
+<%= link_to "マイページへ", user_path(current_user.id) %>
+<h3>スポット詳細</h3>
+<div class="driving">
+  <% @driving.genres.each do |genre| %>
+    <span><%= genre.name %></span>
+  <% end %>
+
+  <p><%= @driving.destination %></p>
+  <p><%= image_tag @driving.image_url, size: "300x200" if @driving.image? %></p>
+  <p><%= @driving.body %></p>
+  <p>所在地：<%= @driving.address %></p>
+  <p><%= @driving.created_at %></p>
+
+<% if user_signed_in? %>
+      <% if current_user.already_liked?(@driving) %>
+          <%= link_to driving_like_path(@driving), method: :delete do %>
+             <i class="fas fa-heart"></i><%= @driving.likes.count %>
+          <% end %>
+      <% else %>
+          <%= link_to driving_likes_path(@driving), method: :post do %>
+             <i class="far fa-heart"></i><%= @driving.likes.count %>
+          <% end %>
+      <% end %>
+  <% else %>
+      <i class="far fa-heart"></i><%= @driving.likes.count %>
+  <% end %>
+</div>
+
+<div class="comment-wrapper">
+  <p>コメント一覧</p>
+  <% @comments.each do |c| %>
+    <div>
+      <%= c.user.name unless c.user.blank? %>:
+      <%= c.content %>
+    </div>
+      <br>
+  <% end %>
+
+  <% if user_signed_in? %>
+    <%= form_with(model: [@driving, @comment], local: true) do |f| %>
+      <%= f.text_area :content %>
+      <%= button_tag type: "submit" do %>
+        <i class="far fa-comments"></i> コメントする
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+<%= link_to "スポット一覧に戻る", drivings_path %>

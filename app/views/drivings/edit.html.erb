@@ -1,0 +1,15 @@
+<h1>投稿の編集</h1>
+
+<%= form_for @driving do |f| %>
+  <p><%= f.label :spot %>
+  <%= f.text_field :destination, :size => 50 %></p> 
+  <p><%= f.label :image %>
+  <%= f.file_field :image %></p>
+  <p><%= f.label :body %>
+  <%= f.text_area :body, :size =>"70x10" %></p>
+  <p><%= f.label :address %>
+  <%= f.text_field :address, :size => 100 %></p>
+  <%= f.submit "編集する" %>
+<% end %>
+<%= link_to "戻る", new_driving_path %>
+
