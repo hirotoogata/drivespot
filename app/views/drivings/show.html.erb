@@ -11,6 +11,34 @@
   <p>所在地：<%= @driving.address %></p>
   <p><%= @driving.created_at %></p>
 
+ #マップの表示
+  <%id = mapstyle> height: 500px; width: 500px %>
+  #APIを読み込み
+<% google_api = "https://maps.googleapis.com/maps/api/js?key=#{ ENV['GOOGLE_MAP_API'] }&callback=initMap".html_safe
+script{ async src = google_api } %>
+
+javascript:
+
+  let map;
+
+  function initMap() {
+    geocoder = new google.maps.Geocoder()
+
+    // マップを作成
+    map = new google.maps.Map(document.getElementById('map'), {
+      // マップの中心に表示する場所の緯度経度を指定
+      center: { lat: 40.7828, lng:-73.9653 },
+      zoom: 12,
+    });
+
+    // マーカーを立てる場所の緯度経度を指定
+    marker = new google.maps.Marker({
+      position: { lat: 40.7828, lng:-73.9653 },
+      map: map
+    });
+  }
+
+
 <% if user_signed_in? %>
       <% if current_user.already_liked?(@driving) %>
           <%= link_to driving_like_path(@driving), method: :delete do %>
