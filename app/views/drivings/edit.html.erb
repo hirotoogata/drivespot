@@ -3,6 +3,17 @@
 <%= form_for @driving do |f| %>
   <p><%= f.label :spot %>
   <%= f.text_field :destination, :size => 50 %></p> 
+  <div class='form-group'>
+  <p>ジャンル</p>
+        <%= f.collection_check_boxes(:genre_ids, Genre.all, :id, :name) do |genre| %>
+            <div class='form-check'>
+                <%= genre.label class: 'form-check-label' do %>
+                    <%= genre.check_box class: 'form-check-input' %>
+                    <%= genre.text %>
+                <% end %>
+            </div>
+        <% end %>
+  </div>
   <p><%= f.label :image %>
   <%= f.file_field :image %></p>
   <p><%= f.label :body %>

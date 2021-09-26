@@ -13,8 +13,14 @@
   </div>
 
   <div class='form-group'>
-        <%= f.select(:genre_ids, Genre.all, :id, :name) do |genre| %>
-            
+  <p>ジャンル</p>
+        <%= f.collection_check_boxes(:genre_ids, Genre.all, :id, :name) do |genre| %>
+            <div class='form-check'>
+                <%= genre.label class: 'form-check-label' do %>
+                    <%= genre.check_box class: 'form-check-input' %>
+                    <%= genre.text %>
+                <% end %>
+            </div>
         <% end %>
   </div>
 

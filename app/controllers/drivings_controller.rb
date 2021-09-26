@@ -1,9 +1,34 @@
 class DrivingsController < ApplicationController
   before_action :authenticate_user!
 
+  #arr = [a,b,c]
+  #hash = {タグ１: 1, タグ２: 0, たぐ３: 1}
+
   def index
     @drivings = Driving.all
-    @rank_drivings = Driving.all.sort {|a,b| b.liked_users.count <=> a.liked_users.count}
+    @drivings = @drivings.where("destination LIKE ? ",'%' + params[:destination_search] + '%') if params[:destination_search]
+    @drivings = @drivings.where("address LIKE ? ",'%' + params[:address_search] + '%') if params[:address_search]
+    
+    if params[:genre_ids]
+      genre_driving_ids = [] #idは配列
+      params[:genre_ids].each do |key, value|   #ハッシュを持ってくるため変数2つ   
+        if value == "1" #チェック済
+          Genre.find_by(name: key).drivings.each do |driving|
+            genre_driving_ids << driving.id
+          end
+          @drivings = @drivings.where(id: genre_driving_ids)
+        end
+      end
+    end
+
+    if params[:genre]
+      Genre.create(name: params[:genre])
+    end
+
+    @rank_drivings = @drivings.sort {|a,b| b.liked_users.count <=> a.liked_users.count}
+  
+    @genres = Genre.all
+  
   end
 
   def new

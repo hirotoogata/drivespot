@@ -1,8 +1,28 @@
 <% if user_signed_in? %>
 <%= link_to "マイページへ", user_path(current_user.id) %>
 
-<h1>検索ページ</h1>
-<h3>スポット一覧</h3>
+<h2>検索ページ</h2>
+<%= form_tag({controller:"drivings",action:"index"}, method: :get) do %>
+   <b>スポット名</b>
+   <%= text_field_tag :destination_search %>
+   <%= submit_tag '検索する'  %>
+
+   <p>
+   <b>ジャンル</b>
+   <% @genres.each do |t| %>
+        <li><%= check_box :genre_ids, t.name %><%= t.name %></li>
+   <% end %>
+   </p>
+
+   <p>
+   <b>所在地（キーワード）</b>
+   <%= text_field_tag :address_search %>
+   </p>
+
+   <%= submit_tag '検索する'  %>
+<% end %>
+
+<h2>スポット一覧</h2>
 <div class="drivings-container">
   <% @drivings.each do |d| %>
   <div class="driving">
@@ -19,4 +39,5 @@
 </div>
 
 <% end %>
+
 
