@@ -11,34 +11,6 @@
   <p>所在地：<%= @driving.address %></p>
   <p><%= @driving.created_at %></p>
 
- #マップの表示
-  <%id = mapstyle> height: 500px; width: 500px %>
-  #APIを読み込み
-<% google_api = "https://maps.googleapis.com/maps/api/js?key=#{ ENV['GOOGLE_MAP_API'] }&callback=initMap".html_safe
-script{ async src = google_api } %>
-
-javascript:
-
-  let map;
-
-  function initMap() {
-    geocoder = new google.maps.Geocoder()
-
-    // マップを作成
-    map = new google.maps.Map(document.getElementById('map'), {
-      // マップの中心に表示する場所の緯度経度を指定
-      center: { lat: 40.7828, lng:-73.9653 },
-      zoom: 12,
-    });
-
-    // マーカーを立てる場所の緯度経度を指定
-    marker = new google.maps.Marker({
-      position: { lat: 40.7828, lng:-73.9653 },
-      map: map
-    });
-  }
-
-
 <% if user_signed_in? %>
       <% if current_user.already_liked?(@driving) %>
           <%= link_to driving_like_path(@driving), method: :delete do %>
@@ -74,3 +46,53 @@ javascript:
   <% end %>
 </div>
 <%= link_to "スポット一覧に戻る", drivings_path %>
+
+
+<div id="routelink">    
+    <a id="link" href="#" target="_blank">経路</a>
+</div>
+<p id = "status"></p>
+
+<script>
+  const status = document.querySelector('#status');
+  
+  function success(position) {
+    const latitude  = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+    status.textContent = '';
+   
+    let link = document.getElementById('link');
+    let url = `https://www.google.com/maps/dir/${latitude},${longitude}/<%= @driving.address %>`;
+
+    console.log(latitude)
+    console.log(longitude)
+    link.setAttribute('href', url);
+  }
+
+  function error() {
+    status.textContent = 'Unable to retrieve your location';
+  }
+
+  if(!navigator.geolocation) {
+    status.textContent = 'Geolocation is not supported by your browser';
+  } else {
+    status.textContent = 'Locating…';
+    navigator.geolocation.getCurrentPosition(success, error);
+  }
+</script>
+
+<iframe src="https://maps.google.co.jp/maps?output=embed&q=<%= @driving.address %>&z=13" width="600" height="400" frameborder="0" scrolling="no" ></iframe>
+
+<a href= "https://maps.googleapis.com/maps/api/directions/json?origin=Toronto&destination=Montreal&key=AIzaSyA3MJhdf57gOrh6HtjK2srqq_8yO538uew" target="_blank" >別ウインドウで開くリンク</a>
+
+<script>
+require 'net/http'
+require 'uri'
+require 'json'
+
+uri = URI.parse(`https://maps.googleapis.com/maps/api/directions/json?origin=${latitude},${longitude}&destination=<%= @driving.address %>&key=AIzaSyA3MJhdf57gOrh6HtjK2srqq_8yO538uew`)
+json = Net::HTTP.get(uri)
+purse = JSON.parse(json)
+result = console.log(json.routes.legs.duration.text)
+</script>

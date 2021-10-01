@@ -7,4 +7,7 @@ class Driving < ApplicationRecord
     has_many :comments, dependent: :destroy
     has_many :driving_genre_relations, dependent: :destroy
     has_many :genres, through: :driving_genre_relations, dependent: :destroy
+
+    geocoded_by :address
+    after_validation :geocode, if: :address_changed?
 end
