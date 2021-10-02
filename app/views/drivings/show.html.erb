@@ -84,14 +84,14 @@
 
 <iframe src="https://maps.google.co.jp/maps?output=embed&q=<%= @driving.address %>&z=13" width="600" height="400" frameborder="0" scrolling="no" ></iframe>
 
-<a href= "https://maps.googleapis.com/maps/api/directions/json?origin=Toronto&destination=Montreal&key=AIzaSyA3MJhdf57gOrh6HtjK2srqq_8yO538uew" target="_blank" >別ウインドウで開くリンク</a>
+<a href= "https://maps.googleapis.com/maps/api/directions/json?origin=Toronto&destination=Montreal&key=api" target="_blank" >別ウインドウで開くリンク</a>
 
 <script>
 require 'net/http'
 require 'uri'
 require 'json'
 
-uri = URI.parse(`https://maps.googleapis.com/maps/api/directions/json?origin=${latitude},${longitude}&destination=<%= @driving.address %>&key=AIzaSyA3MJhdf57gOrh6HtjK2srqq_8yO538uew`)
+uri = URI.parse(`https://maps.googleapis.com/maps/api/directions/json?origin=${latitude},${longitude}&destination=<%= @driving.address %>&key=api`)
 json = Net::HTTP.get(uri)
 purse = JSON.parse(json)
 result = console.log(json.routes.legs.duration.text)
